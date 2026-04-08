@@ -4,6 +4,7 @@ const products = [
   {
     id: 1,
     name: "Sac tendance",
+    category: "sacs",
     price: 15000,
     images: [
       "https://via.placeholder.com/600x600?text=Sac+1",
@@ -16,6 +17,7 @@ const products = [
   {
     id: 2,
     name: "Chaussure stylée",
+    category: "chaussures",
     price: 20000,
     images: [
       "https://via.placeholder.com/600x600?text=Chaussure+1",
@@ -23,6 +25,17 @@ const products = [
       "https://via.placeholder.com/600x600?text=Chaussure+3",
       "https://via.placeholder.com/600x600?text=Chaussure+4",
       "https://via.placeholder.com/600x600?text=Chaussure+5"
+    ]
+  },
+  {
+    id: 3,
+    name: "Montre élégante",
+    category: "accessoires",
+    price: 12000,
+    images: [
+      "https://via.placeholder.com/600x600?text=Montre+1",
+      "https://via.placeholder.com/600x600?text=Montre+2",
+      "https://via.placeholder.com/600x600?text=Montre+3"
     ]
   }
 ];
@@ -55,25 +68,42 @@ function decreaseQty(productId) {
   renderCart();
 }
 
+function getFilteredProducts() {
+  const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+  const categoryValue = document.getElementById("categoryFilter").value;
+
+  return products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchValue);
+    const matchesCategory = categoryValue === "all" || product.category === categoryValue;
+    return matchesSearch && matchesCategory;
+  });
+}
+
 function renderProducts() {
   const container = document.getElementById("products");
-  container.innerHTML = "";
+  const filteredProducts = getFilteredProducts();
 
-  products.forEach((product) => {
-    const thumbs = product.images.map((img) => `
+  if (!filteredProducts.length) {
+    container.innerHTML = `<div class="product-card"><h3>Aucun produit trouvé</h3></div>`;
+    return;
+  }
+
+  container.innerHTML = filteredProducts.map(product => {
+    const thumbs = product.images.map(img => `
       <img src="${img}" class="thumb" onclick="changeMainImage(${product.id}, '${img}')" />
     `).join("");
 
-    container.innerHTML += `
+    return `
       <div class="product-card">
         <img id="main-img-${product.id}" class="main-image" src="${product.images[0]}" alt="${product.name}">
         <div class="thumbs">${thumbs}</div>
+        <div class="category-badge">${product.category}</div>
         <h3>${product.name}</h3>
         <p class="price">Prix : ${formatPrice(product.price)}</p>
         <button class="btn" onclick="addToCart(${product.id})">Ajouter au panier</button>
       </div>
     `;
-  });
+  }).join("");
 }
 
 function renderCart() {
@@ -94,8 +124,8 @@ function renderCart() {
   let total = 0;
   let message = "Bonjour, je veux commander :\n\n";
 
-  cartItems.innerHTML = productIds.map((id) => {
-    const product = products.find((p) => p.id === Number(id));
+  cartItems.innerHTML = productIds.map(id => {
+    const product = products.find(p => p.id === Number(id));
     const qty = cart[id];
     const subtotal = product.price * qty;
     total += subtotal;
@@ -122,6 +152,9 @@ function renderCart() {
   orderBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   orderBtn.classList.remove("disabled");
 }
+
+document.getElementById("searchInput").addEventListener("input", renderProducts);
+document.getElementById("categoryFilter").addEventListener("change", renderProducts);
 
 renderProducts();
 renderCart();

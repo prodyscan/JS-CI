@@ -13,7 +13,22 @@
   </header>
 
   <div class="container">
-    <div id="products" class="products-grid"></div>
+    <div class="filters-card">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Rechercher un produit..."
+      />
+
+      <select id="categoryFilter">
+        <option value="all">Toutes les catégories</option>
+        <option value="sacs">Sacs</option>
+        <option value="chaussures">Chaussures</option>
+        <option value="accessoires">Accessoires</option>
+      </select>
+    </div>
+
+    <div id="products" class="products-scroll"></div>
 
     <div class="cart-section">
       <h2>Panier</h2>
