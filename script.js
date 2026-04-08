@@ -78,8 +78,13 @@ function renderProducts() {
     const qty = cart[product.id] || 0;
 
     return `
+
+// Commentaire
       <div class="product-card">
-        <img id="main-img-${product.id}" class="main-image" src="${firstImage}" alt="${product.name}">
+        <a href="product.html?id=${product.id}" class="product-link">
+          <img id="main-img-${product.id}" class="main-image" src="${firstImage}" alt="${product.name}">
+        </a>
+
         <div class="thumbs">${thumbs}</div>
         <div class="category-badge">${product.category}</div>
         <h3>${product.name}</h3>
@@ -90,13 +95,13 @@ function renderProducts() {
           qty > 0
             ? `
             <div class="qty-box product-qty">
-              <button class="qty-btn" onclick="decreaseQty(${product.id})">-</button>
+              <button class="qty-btn" onclick="event.preventDefault(); decreaseQty(${product.id})">-</button>
               <span>${qty}</span>
-              <button class="qty-btn" onclick="increaseQty(${product.id})">+</button>
+              <button class="qty-btn" onclick="event.preventDefault(); increaseQty(${product.id})">+</button>
             </div>
             `
             : `
-            <button class="btn" onclick="addToCart(${product.id})">Ajouter au panier</button>
+            <button class="btn" onclick="event.preventDefault(); addToCart(${product.id})">Ajouter au panier</button>
             `
         }
       </div>
