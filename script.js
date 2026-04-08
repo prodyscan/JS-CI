@@ -129,7 +129,10 @@ function renderCart() {
     const subtotal = Number(product.price) * qty;
     total += subtotal;
 
+    const productLink = `${window.location.origin}/product.html?id=${product.id}`;
+
     message += `- ${product.name} x${qty} = ${formatPrice(subtotal)}\n`;
+    message += `  Lien : ${productLink}\n\n`;
 
     return `
       <div class="cart-item">

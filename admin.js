@@ -2,6 +2,8 @@ const SUPABASE_URL = "https://tziawijeohkvuqshkavi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_Nar6wT4O1pbqX4MueWxoGQ_L8btLudE";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+let editingProductId = null;
+
 async function uploadImage(file) {
   if (!file) return "";
 
@@ -13,9 +15,7 @@ async function uploadImage(file) {
     .from("product-images")
     .upload(filePath, file);
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
   const { data } = supabaseClient.storage
     .from("product-images")
@@ -45,46 +45,81 @@ async function addProduct() {
   }
 
   try {
-    const image_1 = await uploadImage(file1);
-    const image_2 = await uploadImage(file2);
-    const image_3 = await uploadImage(file3);
-    const image_4 = await uploadImage(file4);
-    const image_5 = await uploadImage(file5);
+    let payload = {
+      name,
+      price,
+      category,
+      description
+    };
 
-    const { error } = await supabaseClient
-      .from("products")
-      .insert({
-        name,
-        price,
-        category,
-        description,
-        image_1,
-        image_2,
-        image_3,
-        image_4,
-        image_5
-      });
+    if (file1) payload.image_1 = await uploadImage(file1);
+    if (file2) payload.image_2 = await uploadImage(file2);
+    if (file3) payload.image_3 = await uploadImage(file3);
+    if (file4) payload.image_4 = await uploadImage(file4);
+    if (file5) payload.image_5 = await uploadImage(file5);
+
+    let error;
+
+    if (editingProductId) {
+      ({ error } = await supabaseClient
+        .from("products")
+        .update(payload)
+        .eq("id", editingProductId));
+    } else {
+      ({ error } = await supabaseClient
+        .from("products")
+        .insert(payload));
+    }
 
     if (error) {
       result.innerHTML = "Erreur : " + error.message;
       return;
     }
 
-    result.innerHTML = "Produit ajouté avec succès ✅";
+    result.innerHTML = editingProductId
+      ? "Produit modifié avec succès ✅"
+      : "Produit ajouté avec succès ✅";
 
-    document.getElementById("name").value = "";
-    document.getElementById("price").value = "";
-    document.getElementById("description").value = "";
-    document.getElementById("image1").value = "";
-    document.getElementById("image2").value = "";
-    document.getElementById("image3").value = "";
-    document.getElementById("image4").value = "";
-    document.getElementById("image5").value = "";
-
+    clearForm();
     loadProducts();
   } catch (e) {
     result.innerHTML = "Erreur upload : " + e.message;
   }
+}
+
+function clearForm() {
+  editingProductId = null;
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("image1").value = "";
+  document.getElementById("image2").value = "";
+  document.getElementById("image3").value = "";
+  document.getElementById("image4").value = "";
+  document.getElementById("image5").value = "";
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("saveBtn").textContent = "Ajouter le produit";
+}
+
+async function editProduct(id) {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error || !data) {
+    alert("Erreur chargement produit.");
+    return;
+  }
+
+  editingProductId = id;
+  document.getElementById("name").value = data.name || "";
+  document.getElementById("price").value = data.price || "";
+  document.getElementById("category").value = data.category || "";
+  document.getElementById("description").value = data.description || "";
+  document.getElementById("saveBtn").textContent = "Mettre à jour le produit";
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 async function deleteProduct(id) {
@@ -123,7 +158,8 @@ async function loadProducts() {
     <div class="admin-product">
       <strong>${p.name}</strong><br>
       Prix : ${Number(p.price).toLocaleString("fr-FR")} FCFA<br>
-      Catégorie : ${p.category}<br>
+      Catégorie : ${p.category}<br><br>
+      <button onclick="editProduct(${p.id})">Modifier</button>
       <button onclick="deleteProduct(${p.id})">Supprimer</button>
     </div>
   `).join("");

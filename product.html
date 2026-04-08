@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Détail produit - JS-CI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>JS-CI Boutique</h1>
+    <p>Détail du produit</p>
+  </header>
+
+  <div class="container">
+    <div id="productDetail" class="product-card">Chargement...</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://tziawijeohkvuqshkavi.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Nar6wT4O1pbqX4MueWxoGQ_L8btLudE";
+    const WHATSAPP_NUMBER = "2250706273262";
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function formatPrice(value) {
+      return Number(value).toLocaleString("fr-FR") + " FCFA";
+    }
+
+    function changeMainImage(imageUrl) {
+      const mainImg = document.getElementById("main-img");
+      if (mainImg) mainImg.src = imageUrl;
+    }
+
+    async function loadProduct() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      if (!id) {
+        document.getElementById("productDetail").innerHTML = "Produit introuvable.";
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (error || !data) {
+        document.getElementById("productDetail").innerHTML = "Produit introuvable.";
+        return;
+      }
+
+      const images = [
+        data.image_1,
+        data.image_2,
+        data.image_3,
+        data.image_4,
+        data.image_5
+      ].filter(Boolean);
+
+      const firstImage = images[0] || "https://via.placeholder.com/600x600?text=Produit";
+
+      const thumbs = images.map(img => `
+        <img src="${img}" class="thumb" onclick="changeMainImage('${img}')" />
+      `).join("");
+
+      const productLink = window.location.href;
+      const waMessage = `Bonjour, je veux commander : ${data.name}\nLien : ${productLink}`;
+
+      document.getElementById("productDetail").innerHTML = `
+        <img id="main-img" class="main-image" src="${firstImage}" alt="${data.name}">
+        <div class="thumbs">${thumbs}</div>
+        <div class="category-badge">${data.category}</div>
+        <h2>${data.name}</h2>
+        <p class="price">Prix : ${formatPrice(data.price)}</p>
+        <p>${data.description || ""}</p>
+        <a class="btn" target="_blank" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}">
+          Commander
+        </a>
+      `;
+    }
+
+    loadProduct();
+  </script>
+</body>
+</html>
