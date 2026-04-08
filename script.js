@@ -5,6 +5,7 @@ const WHATSAPP_NUMBER = "2250706273262";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let allProducts = [];
+let cart = {};
 
 function formatPrice(value) {
   return Number(value).toLocaleString("fr-FR") + " FCFA";
@@ -31,6 +32,25 @@ function getFilteredProducts() {
   });
 }
 
+function addToCart(productId) {
+  cart[productId] = (cart[productId] || 0) + 1;
+  renderCart();
+}
+
+function increaseQty(productId) {
+  cart[productId] = (cart[productId] || 0) + 1;
+  renderCart();
+}
+
+function decreaseQty(productId) {
+  if (!cart[productId]) return;
+  cart[productId] -= 1;
+  if (cart[productId] <= 0) {
+    delete cart[productId];
+  }
+  renderCart();
+}
+
 function renderProducts() {
   const container = document.getElementById("products");
   const filteredProducts = getFilteredProducts();
@@ -55,8 +75,7 @@ function renderProducts() {
       <img src="${img}" class="thumb" onclick="changeMainImage(${product.id}, '${img}')" />
     `).join("");
 
-    const message = `Bonjour, je veux commander : ${product.name}`;
-    const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    const qty = cart[product.id] || 0;
 
     return `
       <div class="product-card">
@@ -66,10 +85,75 @@ function renderProducts() {
         <h3>${product.name}</h3>
         <p class="price">Prix : ${formatPrice(product.price)}</p>
         <p>${product.description || ""}</p>
-        <a class="btn" href="${waLink}" target="_blank">Commander</a>
+
+        ${
+          qty > 0
+            ? `
+            <div class="qty-box product-qty">
+              <button class="qty-btn" onclick="decreaseQty(${product.id})">-</button>
+              <span>${qty}</span>
+              <button class="qty-btn" onclick="increaseQty(${product.id})">+</button>
+            </div>
+            `
+            : `
+            <button class="btn" onclick="addToCart(${product.id})">Ajouter au panier</button>
+            `
+        }
       </div>
     `;
   }).join("");
+}
+
+function renderCart() {
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
+  const orderBtn = document.getElementById("orderBtn");
+
+  const productIds = Object.keys(cart);
+
+  if (!productIds.length) {
+    cartItems.innerHTML = "Votre panier est vide.";
+    cartTotal.textContent = "Total : 0 FCFA";
+    orderBtn.removeAttribute("href");
+    orderBtn.classList.add("disabled");
+    renderProducts();
+    return;
+  }
+
+  let total = 0;
+  let message = "Bonjour, je veux commander :\n\n";
+
+  cartItems.innerHTML = productIds.map(id => {
+    const product = allProducts.find(p => p.id === Number(id));
+    const qty = cart[id];
+    const subtotal = Number(product.price) * qty;
+    total += subtotal;
+
+    message += `- ${product.name} x${qty} = ${formatPrice(subtotal)}\n`;
+
+    return `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <strong>${product.name}</strong><br>
+          <span>${formatPrice(product.price)}</span>
+        </div>
+
+        <div class="qty-box">
+          <button class="qty-btn" onclick="decreaseQty(${product.id})">-</button>
+          <span>${qty}</span>
+          <button class="qty-btn" onclick="increaseQty(${product.id})">+</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  cartTotal.textContent = `Total : ${formatPrice(total)}`;
+  message += `\nTotal : ${formatPrice(total)}`;
+
+  orderBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  orderBtn.classList.remove("disabled");
+
+  renderProducts();
 }
 
 async function loadProducts() {
@@ -83,8 +167,9 @@ async function loadProducts() {
     return;
   }
 
-  allProducts = data;
+  allProducts = data || [];
   renderProducts();
+  renderCart();
 }
 
 document.getElementById("searchInput").addEventListener("input", renderProducts);
