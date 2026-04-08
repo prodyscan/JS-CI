@@ -1,54 +1,23 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f5f5f5;
-  color: #111;
-}
-
-header {
-  background: #000;
-  color: #fff;
-  text-align: center;
-  padding: 24px 16px;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 36px;
-}
-
-header p {
-  margin: 10px 0 0;
-  font-size: 18px;
-}
-
-.container {
-  padding: 16px;
-  max-width: 1100px;
-  margin: auto;
-}
-
+.form-card,
+.admin-product,
 .filters-card,
-.cart-section {
+.product-card {
   background: #fff;
   padding: 16px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.filters-card {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   margin-bottom: 16px;
 }
 
-.filters-card input,
-.filters-card select {
+textarea,
+input,
+select {
   width: 100%;
   padding: 12px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-sizing: border-box;
-  font-size: 16px;
 }
 
 .products-scroll {
@@ -56,18 +25,12 @@ header p {
   gap: 16px;
   overflow-x: auto;
   padding-bottom: 10px;
-  scroll-snap-type: x mandatory;
 }
 
 .product-card {
   min-width: 280px;
   max-width: 280px;
   flex: 0 0 auto;
-  background: #fff;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  scroll-snap-align: start;
 }
 
 .main-image {
@@ -90,13 +53,6 @@ header p {
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
-  border: 2px solid #eee;
-  flex-shrink: 0;
-}
-
-.price {
-  font-size: 18px;
-  font-weight: bold;
 }
 
 .category-badge {
@@ -105,7 +61,12 @@ header p {
   border-radius: 999px;
   padding: 6px 10px;
   font-size: 13px;
-  margin-bottom: 10px;
+  margin: 10px 0;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .btn {
@@ -119,52 +80,4 @@ header p {
   border: none;
   border-radius: 10px;
   text-decoration: none;
-  font-size: 17px;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.cart-section {
-  margin-top: 18px;
-}
-
-.cart-items {
-  margin-top: 12px;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.qty-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.qty-btn {
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 8px;
-  background: #111;
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.cart-total {
-  margin-top: 14px;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.order-btn.disabled {
-  pointer-events: none;
-  opacity: 0.5;
 }

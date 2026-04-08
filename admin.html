@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin JS-CI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Admin JS-CI</h1>
+    <p>Ajouter et gérer les produits</p>
+  </header>
+
+  <div class="container">
+    <div class="form-card">
+      <h2>Ajouter un produit</h2>
+
+      <input id="name" type="text" placeholder="Nom du produit" />
+      <input id="price" type="number" placeholder="Prix" />
+
+      <select id="category">
+        <option value="velo-electrique">Vélo électrique</option>
+        <option value="moto-electrique">Moto électrique</option>
+        <option value="savon">Savon</option>
+      </select>
+
+      <textarea id="description" placeholder="Description du produit"></textarea>
+
+      <input id="image1" type="text" placeholder="Lien image 1" />
+      <input id="image2" type="text" placeholder="Lien image 2" />
+      <input id="image3" type="text" placeholder="Lien image 3" />
+      <input id="image4" type="text" placeholder="Lien image 4" />
+      <input id="image5" type="text" placeholder="Lien image 5" />
+
+      <button onclick="addProduct()">Ajouter le produit</button>
+      <div id="result"></div>
+    </div>
+
+    <div class="form-card">
+      <h2>Produits enregistrés</h2>
+      <div id="productList">Chargement...</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

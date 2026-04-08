@@ -14,30 +14,19 @@
 
   <div class="container">
     <div class="filters-card">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Rechercher un produit..."
-      />
-
+      <input type="text" id="searchInput" placeholder="Rechercher un produit..." />
       <select id="categoryFilter">
         <option value="all">Toutes les catégories</option>
-        <option value="sacs">Sacs</option>
-        <option value="chaussures">Chaussures</option>
-        <option value="accessoires">Accessoires</option>
+        <option value="velo-electrique">Vélo électrique</option>
+        <option value="moto-electrique">Moto électrique</option>
+        <option value="savon">Savon</option>
       </select>
     </div>
 
-    <div id="products" class="products-scroll"></div>
-
-    <div class="cart-section">
-      <h2>Panier</h2>
-      <div id="cartItems" class="cart-items">Votre panier est vide.</div>
-      <div class="cart-total" id="cartTotal">Total : 0 FCFA</div>
-      <a id="orderBtn" class="btn order-btn disabled" target="_blank">Commander sur WhatsApp</a>
-    </div>
+    <div id="products" class="products-scroll">Chargement...</div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
 </html>
