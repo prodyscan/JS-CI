@@ -17,21 +17,54 @@
       <h2>Ajouter un produit</h2>
 
       <input id="name" type="text" placeholder="Nom du produit" />
-      <input id="price" type="number" placeholder="Prix" />
+      <input id="price" type="number" placeholder="Prix en FCFA" />
 
       <select id="category">
+        <option value="mode-femme">Mode femme</option>
+        <option value="mode-homme">Mode homme</option>
+        <option value="chaussures">Chaussures</option>
+        <option value="sacs">Sacs</option>
+        <option value="montres">Montres</option>
+        <option value="bijoux">Bijoux</option>
+        <option value="beaute">Beauté</option>
+        <option value="savon">Savon</option>
+        <option value="cosmetiques">Cosmétiques</option>
+        <option value="electromenager">Électroménager</option>
+        <option value="electronique">Électronique</option>
+        <option value="telephones">Téléphones</option>
+        <option value="accessoires-telephones">Accessoires téléphones</option>
+        <option value="informatique">Informatique</option>
+        <option value="maison">Maison</option>
+        <option value="decoration">Décoration</option>
+        <option value="cuisine">Cuisine</option>
+        <option value="meubles">Meubles</option>
         <option value="velo-electrique">Vélo électrique</option>
         <option value="moto-electrique">Moto électrique</option>
-        <option value="savon">Savon</option>
+        <option value="auto-moto">Auto / Moto</option>
+        <option value="enfants">Enfants</option>
+        <option value="jouets">Jouets</option>
+        <option value="sport">Sport</option>
+        <option value="sante">Santé</option>
+        <option value="alimentaire">Alimentaire</option>
+        <option value="divers">Divers</option>
       </select>
 
       <textarea id="description" placeholder="Description du produit"></textarea>
 
-      <input id="image1" type="text" placeholder="Lien image 1" />
-      <input id="image2" type="text" placeholder="Lien image 2" />
-      <input id="image3" type="text" placeholder="Lien image 3" />
-      <input id="image4" type="text" placeholder="Lien image 4" />
-      <input id="image5" type="text" placeholder="Lien image 5" />
+      <label>Image 1</label>
+      <input id="image1" type="file" accept="image/*" />
+
+      <label>Image 2</label>
+      <input id="image2" type="file" accept="image/*" />
+
+      <label>Image 3</label>
+      <input id="image3" type="file" accept="image/*" />
+
+      <label>Image 4</label>
+      <input id="image4" type="file" accept="image/*" />
+
+      <label>Image 5</label>
+      <input id="image5" type="file" accept="image/*" />
 
       <button onclick="addProduct()">Ajouter le produit</button>
       <div id="result"></div>

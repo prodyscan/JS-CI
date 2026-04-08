@@ -20,8 +20,13 @@ function getFilteredProducts() {
   const categoryValue = document.getElementById("categoryFilter").value;
 
   return allProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchValue);
-    const matchesCategory = categoryValue === "all" || product.category === categoryValue;
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchValue) ||
+      (product.description || "").toLowerCase().includes(searchValue);
+
+    const matchesCategory =
+      categoryValue === "all" || product.category === categoryValue;
+
     return matchesSearch && matchesCategory;
   });
 }
