@@ -79,7 +79,6 @@ function renderProducts() {
 
     return `
 
-// Commentaire
       <div class="product-card">
         <a href="product.html?id=${product.id}" class="product-link">
           <img id="main-img-${product.id}" class="main-image" src="${firstImage}" alt="${product.name}">
