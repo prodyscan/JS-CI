@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JS-CI Boutique</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header>
+    <h1>JS-CI Boutique</h1>
+    <p>Produits disponibles</p>
+  </header>
 
-<header>
-  <h1>JS-CI Boutique</h1>
-  <p>Produits importés de Chine 🇨🇳</p>
-</header>
+  <div class="container">
+    <div id="products" class="products-grid"></div>
 
-<div class="container" id="products"></div>
+    <div class="cart-section">
+      <h2>Panier</h2>
+      <div id="cartItems" class="cart-items">Votre panier est vide.</div>
+      <div class="cart-total" id="cartTotal">Total : 0 FCFA</div>
+      <a id="orderBtn" class="btn order-btn disabled" target="_blank">Commander sur WhatsApp</a>
+    </div>
+  </div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
